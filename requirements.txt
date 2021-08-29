@@ -1,6 +1,6 @@
 anytree==2.8.0
 appdirs==1.4.4
-apsw==3.35.4.post1
+apsw==3.9.2.post1
 asgiref==3.4.1
 astroid==2.7.2
 Beaker==1.11.0
