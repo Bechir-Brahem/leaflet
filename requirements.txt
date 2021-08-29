@@ -27,7 +27,6 @@ html5-parser==0.4.9
 html5lib==1.1
 idna==3.2
 ifaddr==0.1.7
-isc==2.0
 isort==5.9.3
 jeepney==0.7.1
 lazy-object-proxy==1.6.0
