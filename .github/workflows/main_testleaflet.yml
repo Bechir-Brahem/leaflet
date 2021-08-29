@@ -24,7 +24,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m venv env
-          python -m pip install --upgrade pip
+          pip install -U pkg-config
           .\\env\\Scripts\\activate
           pip install -r requirements.txt
 
