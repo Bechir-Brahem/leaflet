@@ -30,7 +30,6 @@ ifaddr==0.1.7
 isort==5.9.3
 jeepney==0.7.1
 lazy-object-proxy==1.6.0
-libtorrent===1.2.14-build-libtorrent-rasterbar-src-libtorrent-rasterbar-1.2.14-bindings-python
 lxml==4.6.3
 Mako==1.1.4
 mallard-ducktype==1.0.2
