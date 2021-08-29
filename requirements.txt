@@ -51,7 +51,6 @@ progress==1.5
 psutil==5.8.0
 psycopg2-binary==2.9.1
 py7zr==0.11.3
-pychm==0.8.6
 pycparser==2.20
 pycryptodome==3.10.1
 Pygments==2.9.0
@@ -74,7 +73,6 @@ sqlparse==0.4.1
 texttable==1.6.4
 toml==0.10.2
 tomli==1.2.0
-unrardll==0.1.4
 urllib3==1.26.6
 webencodings==0.5.1
 wrapt==1.12.1
