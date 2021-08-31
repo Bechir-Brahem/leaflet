@@ -1,0 +1,21 @@
+var express = require('express');
+var path = require('path');
+var twig = require('twig');
+
+var indexRouter = require('./routes/index');
+
+var app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'html');
+app.engine('html', twig.__express);
+
+app.use('/static', express.static('public'))
+
+
+app.use('/', indexRouter);
+
+
+
+module.exports = app;

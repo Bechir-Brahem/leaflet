@@ -1,5 +1,4 @@
 <!doctype html>
-{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -11,7 +10,7 @@
      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/><!-- Make sure you put this AFTER Leaflet's CSS -->
-   <link rel="stylesheet"  type="text/css" href="{%static 'home/style.css'%}"> </link>
+   <link rel="stylesheet"  type="text/css" href="/static/style.css"> </link>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -61,6 +60,6 @@
  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
-    <script src="{% static 'home/script.js' %}"></script>
+    <script src="/static/script.js"></script>
   </body>
 </html>
