@@ -28,23 +28,9 @@
 
     <h1 id="info" class="text-primary">Hello, world! </h1>
 
-   {#  <div class="mb-2">
-        <b style="margin-right: 10px">display: </b>
-        <div class="form-check-inline form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked
-            onclick="toggleBoats()">
-            <label class="form-check-label" for="flexSwitchCheckDefault">boats</label>
-        </div>
-        <div class="form-check-inline form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-            <label class="form-check-label" for="flexSwitchCheckChecked">cars</label>
-        </div>
-        <div class="form-check-inline form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
-            <label class="form-check-label" for="flexSwitchCheckDefault">lighthouses</label>
-        </div>
+    <div id="name_filter" class="mb-2">
+<b style="margin-right: 10px">boats: </b>
     </div>
-   #}
 
 
     <div id="mapid"></div>
@@ -61,8 +47,10 @@
 
 {# pass data to javascript #}
 <script>
-    al = 44;
+    boatData = {{ value | raw }} ;
 </script>
+<script src="/static/helper.js"></script>
+<script src="/static/Person.js"></script>
 <script src="/static/script.js"></script>
 </body>
 </html>
