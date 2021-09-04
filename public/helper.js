@@ -1,4 +1,4 @@
-const ICON_SIZE=[24,24]
+const ICON_SIZE = [24, 24]
 var lighthouseIcon = L.icon({
     iconUrl: 'https://cdn-icons-png.flaticon.com/512/5052/5052379.png',
     iconSize: ICON_SIZE,
@@ -16,12 +16,10 @@ var carIcon = L.icon({
 let mapCenter = [36, 10.5], mapZoom = 8;
 
 
-boats = [];
-
-people=[];
+people = [];
 peopleCount = 0;
 nameMap = new Map();
-
+let colors = new Color();
 
 
 /**
@@ -32,7 +30,8 @@ function groupDataByName() {
         if (!nameMap.has(boat.NA)) {
             people.push(new Person())
             nameMap.set(boat.NA, peopleCount);
-            people[peopleCount].name=boat.NA;
+            people[peopleCount].name = boat.NA;
+            people[peopleCount].color = colors.getNext();
             peopleCount++;
         }
         people[nameMap.get(boat.NA)].boats.push(boat);
@@ -50,14 +49,17 @@ function popupText(position) {
  * create html filter by person name
  */
 let html_filter = document.getElementById("name_filter");
-function createHtmlFilter(){
+
+function createHtmlFilter() {
     let tmp = "";
     nameMap.forEach((value, person) => {
 
-        tmp += '<div class="form-check-inline form-switch">' +
-            '<input class="form-check-input" type="checkbox" id="checkbox'+value+'" onclick="toggleBoats()"  checked>' +
+        tmp += '<div class="form-check form-switch">' +
+            '<input class="form-check-input" type="checkbox" id="checkbox' + value + '"   checked>' +
             '<label class="form-check-label" for="flexSwitchCheckDefault">' + person + '</label>' +
-            '</div>'
+            '<div style="">from: <input class="ms-1 me-4" type="date" id="dateFrom' + value + '">' +
+            'to: <input type="date" class="ms-1" id="dateTo' + value + '"></div>' +
+            '</div> '
 
 
     });
@@ -65,21 +67,35 @@ function createHtmlFilter(){
 }
 
 
-
 function drawBoats() {
-people.forEach(person=>{
-    person.draw();
-})
+    people.forEach(person => {
+        person.draw();
+    })
 }
-function handleEvent(e){
-    let element=e.target;
-    if (element.id.match(/checkbox[0-9]+$/)) {
-        people[element.id.substring(8)].toggle();
+
+function handleEvent(e) {
+    let element = e.target;
+    if (e.type === "click") {
+        if (element.id.match(/checkbox[0-9]+$/)) {
+            people[element.id.substring(8)].toggle();
+        }
+    } else if (e.type === "change") {
+        if (element.id.match(/dateTo[0-9]+$/)) {
+            let value = parseInt(element.value.split("-").join(''))
+            people[element.id.substring(6)].endDate = value;
+            people[element.id.substring(6)].reDraw();
+
+        } else if (element.id.match(/dateFrom[0-9]+$/)) {
+            let value = parseInt(element.value.split("-").join(''))
+            people[element.id.substring(8)].startDate = value;
+            people[element.id.substring(8)].reDraw();
+
+        }
     }
 
 }
-html_filter.addEventListener("click",handleEvent);
 
-function toggleBoats(){
+html_filter.addEventListener("click", handleEvent);
+html_filter.addEventListener("change", handleEvent);
 
-}
+

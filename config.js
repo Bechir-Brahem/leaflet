@@ -7,12 +7,6 @@ const config = {
      database: env.DB_NAME || 'sql3434037',
    },
 
-  // db: {
-    // host: env.DB_HOST || 'localhost',
-    // user: env.DB_USER || 'bb',
-    // password: env.DB_PASSWORD || 'samirsp6',
-    // database: env.DB_NAME || 'tracking',
-  // },
   // listPerPage: env.LIST_PER_PAGE || 10,
 };
 
