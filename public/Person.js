@@ -39,12 +39,12 @@ class Person {
                     // value 100 depends on the time between positions
                     if (index !== 0) {
                         if (last_pos.DA === position.DA) {
-                            if (position.TI - last_pos.TI > 100) problem = true;
+                            if (position.TI - last_pos.TI > 200) problem = true;
                         } else {
                             //TODO: check the date
                             //this code returns a wrong value if we are on different dates (more than one day)
                             //and the difference between times is 100 (1 hour)
-                            if (("2400" - last_pos.TI) + parseInt(position.TI) > 100) problem = true;
+                            if (("2400" - last_pos.TI) + parseInt(position.TI) > 200) problem = true;
                         }
                     }
 

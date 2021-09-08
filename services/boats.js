@@ -4,7 +4,7 @@ const config = require('../config');
 //TODO: paginator
 async function getMultiple(){
     const rows = await db.query(
-       `select ID,NA,TM,LT,LG,DA,TI from trackingData ORDER BY ID DESC LIMIT 200;`
+       `select ID,NA,TM,LT,LG,DA,TI from trackingData ORDER BY ID DESC LIMIT 1000;`
     );
 
     return emptyOrRows(rows);
