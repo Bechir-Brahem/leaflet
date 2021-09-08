@@ -49,7 +49,7 @@ class Person {
                     }
 
                     if (problem) {
-                        this.problems.push("time difference between positions is more than an hour for " + position.NA +
+                        this.problems.push("time difference between positions is more than two hours for " + position.NA +
                         "'s boat from  "+  numberToDateString(last_pos.DA)+" "+numberToTimeString(last_pos.TI)+" (" + last_pos.LT +","+last_pos.LG+ ")"+
                         " to "+ numberToDateString(position.DA)+" "+numberToTimeString(position.TI)+" (" + coordinates + ")");
                         this.layerGroup.addLayer(L.polyline(polylinePoints, {color: colors.shadeHexColor(this.color, -0.4)}));
