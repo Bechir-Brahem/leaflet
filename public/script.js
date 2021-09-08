@@ -1,6 +1,5 @@
 
 
-groupDataByName();
 
 var mymap = L.map('mapid', {
     center: mapCenter,
@@ -15,8 +14,10 @@ L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{e
 }).addTo(mymap);
 
 
+groupDataByName();
 createHtmlFilter();
 drawBoats();
+fillHtmlProblems();
 
 
 RasEnghela = L.marker([37.34454, 9.738801], {icon: lighthouseIcon, title: 'Ras Enghela'}).bindPopup(
