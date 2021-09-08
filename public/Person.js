@@ -22,6 +22,7 @@ class Person {
         if (!this.drawen) {
             let polylinePoints = [];
             var boatIcon = generateBoatIcon(this.color);
+            var redBoatIcon=generateBoatIcon("red","red")
             let last_pos = {};
             let problem = false;
             this.layerGroup = L.layerGroup();
@@ -33,10 +34,7 @@ class Person {
                     let coordinates = [position.LT, position.LG];
 
 
-                    let tmp = L.marker(coordinates, {icon: boatIcon, title: position.NA})
-                        .bindPopup(popupText(position));
 
-                    // value 100 depends on the time between positions
                     if (index !== 0) {
                         if (last_pos.DA === position.DA) {
                             if (position.TI - last_pos.TI > 200) problem = true;
@@ -49,19 +47,31 @@ class Person {
                     }
 
                     if (problem) {
-                        this.problems.push("time difference between positions is more than two hours for " + position.NA +
+                        //TODO: store only values in problems and make a function that generates the error to save space
+                        this.problems.push("time difference between positions is more than two hours for " + this.name +
                         "'s boat from  "+  numberToDateString(last_pos.DA)+" "+numberToTimeString(last_pos.TI)+" (" + last_pos.LT +","+last_pos.LG+ ")"+
                         " to "+ numberToDateString(position.DA)+" "+numberToTimeString(position.TI)+" (" + coordinates + ")");
                         this.layerGroup.addLayer(L.polyline(polylinePoints, {color: colors.shadeHexColor(this.color, -0.4)}));
                         polylinePoints = [[last_pos.LT, last_pos.LG], coordinates];
-                        this.layerGroup.addLayer(L.polyline(polylinePoints, {
+                        this.layerGroup.addLayer(
+                            L.polyline(polylinePoints, {
                             color: 'red',
                             dashArray: '20,20'
-                        }));
+                        }).bindPopup(this.name+" " +numberToDateString(last_pos.DA)+" "+numberToTimeString(last_pos.TI)+" => "+
+                                numberToDateString(position.DA)+" "+numberToTimeString(position.TI)
+                            )
+                        );
                         polylinePoints = [];
 
 
                     }
+                    let tmp = L.marker(coordinates, {
+                        icon: problem?redBoatIcon:boatIcon,
+                        title: position.NA,
+                        riseOnHover:true,
+                        zIndexOffset:problem?20:0
+                    })
+                        .bindPopup(popupText(position));
 
 
                     polylinePoints.push(coordinates);
