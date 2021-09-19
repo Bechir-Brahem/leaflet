@@ -1,4 +1,4 @@
-import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
+import {MapContainer, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import React, {Component} from 'react';
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -14,38 +14,83 @@ L.Icon.Default.mergeOptions({
     shadowUrl: '/static/images/marker-shadow.png'
 });
 
-let position = [36, 10.5];
+let center = [36, 10.5];
 
 class Map extends Component {
+    checkProblem(position, lastPos) {
+        if (lastPos.DA === position.DA) {
+            if (position.TI - lastPos.TI > 200) return true;
+        } else {
+            //TODO: check the date
+            //this code returns a wrong value if we are on different dates (more than one day)
+            //and the difference between times is 100 (1 hour)
+            //HINT: i can use Date object
+            if (("2400" - lastPos.TI) + parseInt(position.TI) > 200) return true;
+        }
+    }
 
     render() {
-        let markers = []
-        this.props.people.forEach(person => {
+        let markers = [];
+        let polylines = [];
+        this.props.people.forEach((person, index) => {
+
             if (person.isShown) {
+
+                let boatIcon = generateBoatIcon(person.color)
+                let lastPos = "";
+                let tmpPolyline = [];
+
                 person.positions.forEach((pos) => {
-                    // let problem = false;
-                    //check date filter
+
+                    let problem = false;
+
                     let intDate = parseInt(pos.DA);
                     if (intDate >= person.startDate && intDate <= person.endDate) {
+
+                        let coordinates = [pos.LT, pos.LG];
                         markers.push(
-                            <Marker key={pos.ID} position={[pos.LT, pos.LG]} icon={generateBoatIcon(person.color)}>
+                            <Marker key={pos.ID} position={coordinates} icon={boatIcon}>
                                 <Popup>
                                     <p dangerouslySetInnerHTML={{__html: popupText(pos)}}>
                                     </p>
                                 </Popup>
                             </Marker>
                         )
+
+                        if (index !== 0) {
+                            problem = this.checkProblem(pos, lastPos);
+                        }
+
+                        if (problem) {
+                            polylines.push(<Polyline pathOptions={{color: person.color}} positions={tmpPolyline}/>)
+
+                            tmpPolyline = [[lastPos.LT, lastPos.LG], coordinates];
+                            polylines.push(<Polyline
+                                pathOptions={{color: 'red', dashArray: "20,20"}}
+                                positions={tmpPolyline}
+                            />)
+                            tmpPolyline = []
+
+                        }
+
+
+                        tmpPolyline.push(coordinates)
+                        lastPos = pos;
                     }
+
                 })
+                if (tmpPolyline.length > 1)
+                    polylines.push(<Polyline pathOptions={{color: person.color}} positions={tmpPolyline}/>)
             }
         })
 
         return (
-            <MapContainer center={position} zoom={8}>
+            <MapContainer center={center} zoom={8}>
                 <TileLayer
                     url={"https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg"}
                 />
                 {markers}
+                {polylines}
             </MapContainer>
         )
     }
