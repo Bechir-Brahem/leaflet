@@ -1,16 +1,36 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import Map from './Map'
+import Person from '../classes/Person'
 
 class App extends Component {
     state = {
-        data: null
+        people: [],
+        // peopleProblems: [
+        //     {
+        //         name: "amira",
+        //         problems: []
+        //     }
+        // ]
     };
 
     componentDidMount() {
         axios.get(`/api`)
             .then(res => {
-                this.setState(res.data);
+                let lastName = "";
+                let people = [];
+                let cnt = -1;
+                res.data.forEach((position, index) => {
+                    if (lastName !== position.NA) {
+                        let tmpPerson = new Person()
+                        tmpPerson.name = position.NA;
+                        cnt++;
+                        lastName = tmpPerson.name;
+                        people.push(tmpPerson)
+                    }
+                    people[cnt].positions.push(position);
+                })
+                this.setState({people: people});
             })
     }
 
@@ -18,9 +38,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome to React</h1>
-                <p>{this.state.data}</p>
-                <Map />
+                <Map people={this.state.people}/>
             </div>
         );
     }
