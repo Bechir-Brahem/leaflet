@@ -62,10 +62,10 @@ class Map extends Component {
                         }
 
                         if (problem) {
-                            polylines.push(<Polyline pathOptions={{color: person.color}} positions={tmpPolyline}/>)
+                            polylines.push(<Polyline key={pos.ID} pathOptions={{color: person.color}} positions={tmpPolyline}/>)
 
                             tmpPolyline = [[lastPos.LT, lastPos.LG], coordinates];
-                            polylines.push(<Polyline
+                            polylines.push(<Polyline key={pos.ID+"a"}
                                 pathOptions={{color: 'red', dashArray: "20,20"}}
                                 positions={tmpPolyline}
                             />)
@@ -80,7 +80,7 @@ class Map extends Component {
 
                 })
                 if (tmpPolyline.length > 1)
-                    polylines.push(<Polyline pathOptions={{color: person.color}} positions={tmpPolyline}/>)
+                    polylines.push(<Polyline key={index+"b"} pathOptions={{color: person.color}} positions={tmpPolyline}/>)
             }
         })
 
