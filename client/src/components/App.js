@@ -6,6 +6,7 @@ import {Col, Row} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import RightPanel from './RightPanel'
 import PersonInfo from "../classes/PersonInfo";
+import {Color} from "../classes/Helper";
 
 
 class App extends Component {
@@ -19,12 +20,14 @@ class App extends Component {
     componentDidMount() {
         axios.get(`/api`)
             .then(res => {
+                let colorGen=new Color();
                 let lastName = "";
                 let people = [];
                 let cnt = -1;
                 res.data.forEach((position, index) => {
                     if (lastName !== position.NA) {
                         let tmpPerson = new Person()
+                        tmpPerson.color=colorGen.getNext()
                         tmpPerson.name = position.NA;
                         cnt++;
                         lastName = tmpPerson.name;
@@ -42,9 +45,6 @@ class App extends Component {
                     this.toggleFunctions.push(()=>{
                         let tmpPeople=this.state.people.slice();
                         let tmpPeopleInfo=this.state.rightPanel.slice();
-                        console.log(tmpPeople)
-                        console.log(tmpPeopleInfo)
-                        console.log(index)
                         tmpPeople[index].isShown=!tmpPeople[index].isShown;
                         tmpPeopleInfo[index].isShown=!tmpPeopleInfo[index].isShown;
                         this.setState({people:tmpPeople,rightPanel:tmpPeopleInfo});

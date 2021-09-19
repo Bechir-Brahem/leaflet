@@ -19,19 +19,16 @@ let position = [36, 10.5];
 class Map extends Component {
 
     render() {
-        let i=0;
         let markers = []
         this.props.people.forEach(person => {
             if (person.isShown) {
-                let tmp = person.positions.map((pos) => {
-
-                    let problem = false;
+                person.positions.forEach((pos) => {
+                    // let problem = false;
                     //check date filter
                     let intDate = parseInt(pos.DA);
                     if (intDate >= person.startDate && intDate <= person.endDate) {
-                        i++;
-                        return (
-                            <Marker key={pos.ID} position={[pos.LT, pos.LG]} icon={generateBoatIcon()}>
+                        markers.push(
+                            <Marker key={pos.ID} position={[pos.LT, pos.LG]} icon={generateBoatIcon(person.color)}>
                                 <Popup>
                                     <p dangerouslySetInnerHTML={{__html: popupText(pos)}}>
                                     </p>
@@ -40,10 +37,8 @@ class Map extends Component {
                         )
                     }
                 })
-                markers = markers.concat(tmp);
             }
         })
-        console.log(i)
 
         return (
             <MapContainer center={position} zoom={8}>
