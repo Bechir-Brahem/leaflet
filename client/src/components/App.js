@@ -2,17 +2,19 @@ import React, {Component} from 'react';
 import axios from "axios";
 import Map from './Map'
 import Person from '../classes/Person'
+import {Col, Row} from 'react-bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import RightPanel from './RightPanel'
+import PersonInfo from "../classes/PersonInfo";
+
 
 class App extends Component {
     state = {
         people: [],
-        // peopleProblems: [
-        //     {
-        //         name: "amira",
-        //         problems: []
-        //     }
-        // ]
+        rightPanel: [],
     };
+
+    toggleFunctions=[];
 
     componentDidMount() {
         axios.get(`/api`)
@@ -30,7 +32,30 @@ class App extends Component {
                     }
                     people[cnt].positions.push(position);
                 })
-                this.setState({people: people});
+                let peopleInfo = [];
+                people.forEach((person,index) => {
+                    let tmp = new PersonInfo(person.name, true, person.positions[0].DA, person.positions[person.positions.length - 1].DA);
+                    peopleInfo.push(tmp);
+
+                })
+                people.forEach((p,index)=>{
+                    this.toggleFunctions.push(()=>{
+                        let tmpPeople=this.state.people.slice();
+                        let tmpPeopleInfo=this.state.rightPanel.slice();
+                        console.log(tmpPeople)
+                        console.log(tmpPeopleInfo)
+                        console.log(index)
+                        tmpPeople[index].isShown=!tmpPeople[index].isShown;
+                        tmpPeopleInfo[index].isShown=!tmpPeopleInfo[index].isShown;
+                        this.setState({people:tmpPeople,rightPanel:tmpPeopleInfo});
+
+
+                    })
+                })
+                this.setState({
+                    people: people,
+                    rightPanel: peopleInfo
+                })
             })
     }
 
@@ -38,7 +63,15 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Map people={this.state.people}/>
+                <Row>
+                    <Col lg={8} md={12}>
+                        <Map people={this.state.people}/>
+                    </Col>
+                    <Col lg={4} md={12}>
+                        <RightPanel peeps={this.state.rightPanel} togglers={this.toggleFunctions}/>
+                    </Col>
+
+                </Row>
             </div>
         );
     }

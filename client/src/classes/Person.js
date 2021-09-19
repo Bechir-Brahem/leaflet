@@ -3,6 +3,8 @@ class Person{
         this.name="";
         this.positions=[];
         this.isShown=true;
+        this.startDate=0;
+        this.endDate=Number.MAX_SAFE_INTEGER;
     }
 }
 export default Person;
