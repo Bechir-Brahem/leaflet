@@ -1,20 +1,21 @@
-import {Component} from "react";
+import { Component } from "react";
 import PersonPanel from "./PersonPanel";
 
 class RightPanel extends Component {
     render() {
-        let personList=this.props.peeps.map((person,index)=>{
+        let personList = this.props.peeps.map((person, index) => {
             return (
-                <PersonPanel key={person.name} name={person.name} checked={person.isShown} toggleF={this.props.togglers[index]} />
-            )
-        })
+                <PersonPanel
+                    key={person.name}
+                    index={index}
+                    name={person.name}
+                    checked={person.isShown}
+                    togglePerson={this.props.togglePerson}
+                />
+            );
+        });
 
-        return (
-            <div>
-                {personList}
-
-            </div>
-        );
+        return <div>{personList}</div>;
     }
 }
 
