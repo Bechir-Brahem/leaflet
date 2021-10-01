@@ -12,7 +12,7 @@ if (chooseDB === 1) {
     config.db = {
         host: env.DB_HOST || "localhost",
         user: env.DB_USER || "bb",
-        password: env.DB_PASSWORD || "",
+        password: env.DB_PASSWORD || "samirsp6",
         database: env.DB_NAME || "tracking",
     };
 }
