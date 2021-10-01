@@ -1,6 +1,6 @@
-const env = process.env;
+const env = process.env
 let chooseDB = 2;
-const config = { db: {} };
+const config = {db: {}}
 if (chooseDB === 1) {
     config.db = {
         host: env.DB_HOST || "sql3.freemysqlhosting.net",
@@ -16,5 +16,6 @@ if (chooseDB === 1) {
         database: env.DB_NAME || "tracking",
     };
 }
+
 
 module.exports = config;
