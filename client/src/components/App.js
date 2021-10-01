@@ -32,21 +32,21 @@ class App extends Component {
 
     // toggleFunctions = [];
 
-    togglePerson(index) {
-        let tmpPeople = [...this.state.people];
-        let tmpPeopleInfo = [...this.state.rightPanel];
-        tmpPeople[index].isShown = !tmpPeople[index].isShown;
-        tmpPeopleInfo[index].isShown = !tmpPeopleInfo[index].isShown;
-        this.setState({ people: tmpPeople, rightPanel: tmpPeopleInfo });
-        // this.setState((state) => {
-        //     let tmpPeople = [...state.people];
-        //     let tmpPeopleInfo = [...state.rightPanel];
-        //     tmpPeople[index].isShown = !tmpPeople[index].isShown;
-        //     tmpPeopleInfo[index].isShown = !tmpPeopleInfo[index].isShown;
-        //     console.log({ people: tmpPeople, rightPanel: tmpPeopleInfo });
-        //     return { people: tmpPeople, rightPanel: tmpPeopleInfo };
-        // });
-    }
+    // togglePerson(index) {
+    //     let tmpPeople = [...this.state.people];
+    //     let tmpPeopleInfo = [...this.state.rightPanel];
+    //     tmpPeople[index].isShown = !tmpPeople[index].isShown;
+    //     tmpPeopleInfo[index].isShown = !tmpPeopleInfo[index].isShown;
+    //     this.setState({ people: tmpPeople, rightPanel: tmpPeopleInfo });
+    //     this.setState((state) => {
+    //         let tmpPeople = [...state.people];
+    //         let tmpPeopleInfo = [...state.rightPanel];
+    //         tmpPeople[index].isShown = !tmpPeople[index].isShown;
+    //         tmpPeopleInfo[index].isShown = !tmpPeopleInfo[index].isShown;
+    //         console.log({ people: tmpPeople, rightPanel: tmpPeopleInfo });
+    //         return { people: tmpPeople, rightPanel: tmpPeopleInfo };
+    //     });
+    // }
 
     // componentDidMount() {
     //     axios.get(`/api`).then((res) => {
@@ -129,6 +129,12 @@ class App extends Component {
         });
     }
 
+    togglePerson(name) {
+        this.state.layerGroups[name].isShown =
+            !this.state.layerGroups[name].isShown;
+        this.setState(this.state);
+    }
+
     render() {
         return (
             <div>
@@ -142,7 +148,10 @@ class App extends Component {
                             peeps={this.state.rightPanel}
                             togglePerson={this.togglePerson.bind(this)}
                         /> */}
-                        {/* <RightPanel people={this.state.layerGroups} /> */}
+                        <RightPanel
+                            layerGroups={this.state.layerGroups}
+                            togglePerson={this.togglePerson.bind(this)}
+                        />
                     </Col>
                 </Row>
             </div>

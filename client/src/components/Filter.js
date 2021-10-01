@@ -10,7 +10,7 @@ class Filter extends Component {
                 id="custom-switch"
                 checked={this.props.isChecked}
                 onChange={() => {
-                    this.props.togglePerson(this.props.index);
+                    this.props.togglePerson(this.props.name);
                 }}
             />
         );
