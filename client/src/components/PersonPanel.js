@@ -23,7 +23,7 @@ class PersonPanel extends Component {
             <div style={{ display: "flex" }}>
                 <Filter
                     isChecked={this.props.checked}
-                    index={this.props.index}
+                    name={this.props.name}
                     togglePerson={this.props.togglePerson}
                 />
                 <span>{this.props.name}</span>
