@@ -15,13 +15,13 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "/static/images/marker-shadow.png",
 });
 
-let center = [36, 10.5];
+let center = [36.08851338894426, 10.80333970970808];
 
 class Map extends Component {
 
     render() {
         return (
-            <MapContainer center={center} zoom={8}>
+            <MapContainer center={center} zoom={7.8}>
                 <TileLayer
                     url={
                         "https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg"

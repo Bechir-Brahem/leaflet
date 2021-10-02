@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import Map from "./Map";
-import {Col, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RightPanel from "./RightPanel";
 import {Color, generateBoatIcon, numberToDateString, numberToTimeString, popupText} from "../classes/Helper";
@@ -164,18 +164,18 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Row>
-                    <Col lg={8} md={12}>
+                <Container>
+                    <Row>
                         <Map layerGroups={this.state.layerGroups}/>
-                    </Col>
-                    <Col lg={4} md={12}>
+                    </Row>
+                    <Row>
                         <RightPanel
                             layerGroups={this.state.layerGroups}
                             togglePerson={this.togglePerson.bind(this)}
                             problems={this.state.problems}
                         />
-                    </Col>
-                </Row>
+                    </Row>
+                </Container>
             </div>
         );
     }

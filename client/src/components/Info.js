@@ -21,7 +21,7 @@ function Info(props) {
             <Accordion.Item eventKey="0">
                 <Accordion.Header>Infractions</Accordion.Header>
                 <Accordion.Body>
-                    <Table striped bordered hover responsive>
+                    <Table striped bordered hover>
                         <thead>
                         <tr>
                             <th>#</th>
