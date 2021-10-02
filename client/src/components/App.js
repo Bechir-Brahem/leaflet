@@ -107,8 +107,6 @@ class App extends Component {
                     }
                     // push the current position to tmpPolyline array
                     tmpPolyline.push(curPos);
-                    // update the lastPos
-                    lastPos = pos;
                 } else {
                     // this person hasn't been registred in the object yet
 
@@ -138,16 +136,20 @@ class App extends Component {
                         isShown: true,
                     };
                 }
+                // update the lastPos
+                lastPos = pos;
             }
 
             // add the polyline containing the last positions for the last person
-            layerGroups[pos.NA].polylines.push(
-                <Polyline
-                    key={pos.ID + "x"}
-                    pathOptions={{ color: layerGroups[pos.NA].color }}
-                    positions={tmpPolyline}
-                />
-            );
+            if (tmpPolyline.length > 1) {
+                layerGroups[pos.NA].polylines.push(
+                    <Polyline
+                        key={pos.ID + "x"}
+                        pathOptions={{ color: layerGroups[pos.NA].color }}
+                        positions={tmpPolyline}
+                    />
+                );
+            }
             tmpPolyline = [];
 
             // map the layerGroups object: transform the markers and poylines of each person
