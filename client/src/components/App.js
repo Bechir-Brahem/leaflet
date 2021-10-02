@@ -4,17 +4,23 @@ import Map from "./Map";
 import {Col, Row} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RightPanel from "./RightPanel";
-import {Color, generateBoatIcon, popupText} from "../classes/Helper";
+import {Color, generateBoatIcon, numberToDateString, numberToTimeString, popupText} from "../classes/Helper";
 import {LayerGroup, Marker, Polyline, Popup} from "react-leaflet";
 
+let boatIcons={};
 const MyMarker = (props) => {
     const pos = props.pos;
-    let boatIcon = generateBoatIcon(props.color);
     let coordinates = [pos.LT, pos.LG];
     return (
-        <Marker key={pos.ID} position={coordinates} icon={boatIcon}>
+        <Marker
+            key={pos.ID}
+            position={coordinates}
+            icon={props.problem ? boatIcons[pos.NA][1] : boatIcons[pos.NA][0]}
+            riseOnHover={true}
+            // zIndexOffset={props.problem?20:0}
+        >
             <Popup>
-                <p dangerouslySetInnerHTML={{__html: popupText(pos)}}></p>
+                <p dangerouslySetInnerHTML={{__html: popupText(pos)}}/>
             </Popup>
         </Marker>
     );
@@ -22,69 +28,87 @@ const MyMarker = (props) => {
 
 class App extends Component {
     state = {
-        // people: [],
-        // rightPanel: [],
-        layerGroups: [],
+        layerGroups: {},
+        problems: {},
     };
 
     checkProblem(position, lastPos) {
-        if (lastPos.DA === position.DA) {
-            if (position.TI - lastPos.TI > 200) return true;
+        let posDate=new Date(numberToDateString(position.DA,1)+" "+numberToTimeString(position.TI));
+        let lastPosDate=new Date(numberToDateString(lastPos.DA,1)+" "+numberToTimeString(lastPos.TI));
+
+        let diff=lastPosDate-posDate;
+        diff=diff/1000/60
+        return diff > 120;
+
+
+    }
+
+    insertPolyline(layerGroups, pos, tmpPolyline, ref = "a", problem = false,lastPos=[]) {
+        if (tmpPolyline.length <= 1) return;
+
+        let obj,text
+        if (problem) {
+            obj = {color: 'red', dashArray: "20,20"}
+            text=<span>
+                <center>{pos.NA}</center>
+                ({pos.LT} ,  {pos.LG} ) => ({lastPos.LT} , {lastPos.LG})
+                <br/>
+                {"("+numberToDateString(pos.DA) + " , "+numberToTimeString(pos.TI)+
+                ") => ("
+                +numberToDateString(lastPos.DA)+" , "+numberToTimeString(lastPos.TI)+")"}
+            </span>
+
         } else {
-            //TODO: check the date
-            //this code returns a wrong value if we are on different dates (more than one day)
-            //and the difference between times is 100 (1 hour)
-            //HINT: i can use Date object
-            if ("2400" - lastPos.TI + parseInt(position.TI) > 200) return true;
+            obj = {color: layerGroups[pos.NA].color};
+            text=<center>{pos.NA}</center>;
         }
-        return false;
+        layerGroups[pos.NA].polylines.push(
+            <Polyline
+                key={pos.ID + ref}
+                pathOptions={obj}
+                positions={tmpPolyline}>
+                <Popup>
+                    {text}
+                </Popup>
+            </Polyline>
+        );
+
     }
 
     componentDidMount() {
         axios.get("/api").then((res) => {
             let layerGroups = {};
+            let newVal=true;
             let colorGen = new Color();
             let lastPos = [];
             let tmpPolyline = [];
             let pos
+            let problem = false;
             /** add markers and polylines**/
             for (pos of res.data) {
+                problem = false;
                 if (layerGroups[pos.NA]) {
-                    layerGroups[pos.NA].markers.push(
-                        <MyMarker key={pos.ID} pos={pos} color={layerGroups[pos.NA].color}/>
-                    );
                     let curPos = [pos.LT, pos.LG]
-                    if (this.checkProblem(pos, lastPos)) {
-                        layerGroups[pos.NA].polylines.push(
-                            <Polyline
-                                key={pos.ID}
-                                pathOptions={{color: layerGroups[pos.NA].color}}
-                                positions={tmpPolyline}
-                            />
-                        );
 
+                    /** problem **/
+                    if (this.checkProblem(pos, lastPos) && !newVal) {
+                        this.insertPolyline(layerGroups, pos, tmpPolyline)
                         tmpPolyline = [[lastPos.LT, lastPos.LG], curPos];
-                        layerGroups[pos.NA].polylines.push(
-                            <Polyline key={pos.ID + "a"}
-                                      pathOptions={{color: 'red', dashArray: "20,20"}}
-                                      positions={tmpPolyline}
-                            />)
+                        this.insertPolyline(layerGroups, pos, tmpPolyline, "b", true,lastPos)
                         tmpPolyline = [];
+                        problem = true;
                     }
+
+                    layerGroups[pos.NA].markers.push(
+                        <MyMarker key={pos.ID} pos={pos} color={layerGroups[pos.NA].color} problem={problem}/>
+                    );
                     tmpPolyline.push(curPos);
-                    lastPos = pos;
+                    newVal=false;
 
 
                 } else {
-                    if (tmpPolyline.length > 1) {
-                        layerGroups[lastPos.NA].polylines.push(
-                            <Polyline
-                                key={pos.ID + "b"}
-                                pathOptions={{color: layerGroups[lastPos.NA].color}}
-                                positions={tmpPolyline}
-                            />
-                        );
-                    }
+
+                    this.insertPolyline(layerGroups, lastPos, tmpPolyline, "c")
                     tmpPolyline = [[pos.LT, pos.LG]];
                     let color = colorGen.getNext();
                     layerGroups[pos.NA] = {
@@ -93,17 +117,15 @@ class App extends Component {
                         polylines: [],
                         isShown: true,
                     };
+                    boatIcons[pos.NA]=[generateBoatIcon(color),generateBoatIcon(color,"red")]
+                    newVal=true
+
                 }
+
+                lastPos=pos
             }
 
-            layerGroups[pos.NA].polylines.push(
-                <Polyline
-                    key={pos.ID + "x"}
-                    pathOptions={{color: layerGroups[pos.NA].color}}
-                    positions={tmpPolyline}
-                />
-            );
-            tmpPolyline = [];
+            this.insertPolyline(layerGroups, pos, tmpPolyline, "d")
 
 
             for (let name in layerGroups) {
@@ -132,14 +154,9 @@ class App extends Component {
             <div>
                 <Row>
                     <Col lg={8} md={12}>
-                        {/* <Map people={this.state.people} /> */}
                         <Map layerGroups={this.state.layerGroups}/>
                     </Col>
                     <Col lg={4} md={12}>
-                        {/* <RightPanel
-                            peeps={this.state.rightPanel}
-                            togglePerson={this.togglePerson.bind(this)}
-                        /> */}
                         <RightPanel
                             layerGroups={this.state.layerGroups}
                             togglePerson={this.togglePerson.bind(this)}

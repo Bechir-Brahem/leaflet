@@ -18,7 +18,7 @@ export function generateBoatIcon(color = "black", color2 = "black") {
     });
 }
 
-function numberToDateString(date, type = 0) {
+export function numberToDateString(date, type = 0) {
     if (!type) {
         return date.substring(6, 8) + '/' + date.substring(4, 6) + '/' + date.substring(0, 4);
     }
@@ -27,7 +27,7 @@ function numberToDateString(date, type = 0) {
     }
 }
 
-function numberToTimeString(str) {
+export function numberToTimeString(str) {
     return str.substr(0, 2) + ':' + str.substr(2, 2)
 }
 
