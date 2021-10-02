@@ -121,7 +121,7 @@ class App extends Component {
                     let color = colorGen.getNext();
                     layerGroups[pos.NA] = {
                         color,
-                        markers: [<MyMarker pos={pos} color={color}/>],
+                        markers: [<MyMarker key={pos.ID} pos={pos} color={color}/>],
                         polylines: [],
                         isShown: true,
                     };
