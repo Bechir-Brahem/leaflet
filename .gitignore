@@ -1,2 +1,6 @@
 node_modules
 .config
+db.sqlite3
+home/
+website/
+server/.env
