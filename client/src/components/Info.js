@@ -1,7 +1,6 @@
 import React from 'react';
 import {numberToDateString, numberToTimeString} from "../classes/Helper";
 import {Accordion, Table} from "react-bootstrap";
-
 function Info(props) {
     let list = props.problems.map((key, index) => {
         return (
@@ -19,7 +18,7 @@ function Info(props) {
     return (
         <Accordion>
             <Accordion.Item eventKey="0">
-                <Accordion.Header>Infractions</Accordion.Header>
+                <Accordion.Header>Infractions ({list.length})</Accordion.Header>
                 <Accordion.Body>
                     <Table striped bordered hover>
                         <thead>

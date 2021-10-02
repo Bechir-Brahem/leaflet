@@ -7,14 +7,17 @@ class RightPanel extends Component {
         return (
             <div style={{
                 overflowY: 'scroll',
-                height: '70vh'
+                height: '70vh',
             }}>
                 {Object.keys(layerGroups).map((key) => (
                     <PersonPanel
                         key={key}
                         name={key}
                         checked={layerGroups[key].isShown}
+                        startDate={layerGroups[key].startDate}
+                        endDate={layerGroups[key].endDate}
                         togglePerson={this.props.togglePerson}
+                        setDate={this.props.setDate}
                         problems={problems[key]}
                     />
                 ))}
