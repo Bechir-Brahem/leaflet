@@ -5,7 +5,7 @@ import {Col, Row} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RightPanel from "./RightPanel";
 import {Color, generateBoatIcon, numberToDateString, numberToTimeString, popupText} from "../classes/Helper";
-import {LayerGroup, Marker, Polyline, Popup} from "react-leaflet";
+import {LayerGroup, Polyline,Marker,  Popup} from "react-leaflet";
 
 let boatIcons={};
 const MyMarker = (props) => {
@@ -66,7 +66,7 @@ class App extends Component {
             <Polyline
                 key={pos.ID + ref}
                 pathOptions={obj}
-                positions={tmpPolyline}>
+                positions={tmpPolyline} >
                 <Popup>
                     {text}
                 </Popup>
@@ -84,6 +84,7 @@ class App extends Component {
             let tmpPolyline = [];
             let pos
             let problem = false;
+            let problems={};
             /** add markers and polylines**/
             for (pos of res.data) {
                 problem = false;
@@ -97,6 +98,13 @@ class App extends Component {
                         this.insertPolyline(layerGroups, pos, tmpPolyline, "b", true,lastPos)
                         tmpPolyline = [];
                         problem = true;
+
+                        if(!problems[pos.NA]){
+                            problems[pos.NA]=[];
+                        }
+
+                        problems[pos.NA].push([pos,lastPos])
+
                     }
 
                     layerGroups[pos.NA].markers.push(
@@ -139,7 +147,11 @@ class App extends Component {
                     isShown: layerGroups[name].isShown,
                 };
             }
-            this.setState({layerGroups});
+            console.log(problems)
+            this.setState({
+                layerGroups:layerGroups,
+                problems:problems
+            });
         });
     }
 
@@ -160,6 +172,7 @@ class App extends Component {
                         <RightPanel
                             layerGroups={this.state.layerGroups}
                             togglePerson={this.togglePerson.bind(this)}
+                            problems={this.state.problems}
                         />
                     </Col>
                 </Row>
