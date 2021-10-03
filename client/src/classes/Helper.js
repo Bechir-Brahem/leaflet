@@ -70,3 +70,13 @@ export class Color {
     }
 
 }
+
+/**
+ *
+ * @param {Date} date
+ * @returns {number|string|*}
+ * @constructor
+ */
+export function dateToString(date)
+{
+}

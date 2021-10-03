@@ -1,5 +1,6 @@
 import {Form} from "react-bootstrap";
 import {Component} from "react";
+import {dateToString} from "../classes/Helper";
 
 class Filter extends Component {
     render() {
@@ -30,13 +31,14 @@ class Filter extends Component {
                         <input
                             type="date"
                             onChange={(e) => this.props.setDate(this.props.name,0,e.target.value)}
+                            value={(this.props.startDate).yyyymmdd()}
                         />
                     </span>
                     <span style={{marginLeft: "10px"}}> to:
                         <input
                             type="date"
                             onChange={(e) => this.props.setDate(this.props.name,1,e.target.value)}
-                            placeholder={"dd-mm-yyyy"}
+                            value={(this.props.endDate).yyyymmdd()}
                         />
                     </span>
                 </div>

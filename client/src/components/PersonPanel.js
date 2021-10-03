@@ -19,6 +19,7 @@ class PersonPanel extends Component {
                         name={this.props.name}
                         togglePerson={this.props.togglePerson}
                         setDate={this.props.setDate}
+
                     />
                 </div>
                 <Info problems={this.props.problems}/>

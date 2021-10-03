@@ -6,9 +6,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import RightPanel from "./RightPanel";
 import {Color, generateBoatIcon, numberToDateString, numberToTimeString, popupText} from "../classes/Helper";
 import {LayerGroup, Marker, Polyline, Popup} from "react-leaflet";
+Date.prototype.yyyymmdd = function() {
+    const mm = this.getMonth() + 1; // getMonth() is zero-based
+    const dd = this.getDate();
+
+    return [this.getFullYear(),
+          (mm>9 ? '' : '0') + mm,
+          (dd>9 ? '' : '0') + dd
+         ].join('-');
+};
 
 let boatIcons = {};
 const MyMarker = (props) => {
+    console.log(44)
     const pos = props.pos;
     let coordinates = [pos.LT, pos.LG];
     return (
@@ -99,6 +109,10 @@ class App extends Component {
 
     }
 
+    checkDate(layerGroups, pos) {
+        return layerGroups[pos.NA].startDate <= new Date(numberToDateString(pos.DA, 1)) <= layerGroups[pos.NA].endDate;
+    }
+
     componentDidMount() {
         axios.get("/api").then((res) => {
             // layerGroups obj holds markers and polyliens for each person, the person's name being the key
@@ -117,7 +131,7 @@ class App extends Component {
             for (pos of res.data) {
                 problem = false;
                 // layerGroups has already the name of the person as a key
-                if (layerGroups[pos.NA]) {
+                if (layerGroups[pos.NA] && this.checkDate(layerGroups, pos)) {
                     // create the current position object
                     let curPos = [pos.LT, pos.LG]
 
@@ -168,12 +182,15 @@ class App extends Component {
                     // the person's color, markers, polylines, and boolean variable to toggle the layerGroup's appearance
                     layerGroups[pos.NA] = {
                         color,
-                        markers: [<MyMarker key={pos.ID} pos={pos} color={color}/>],
+                        markers: [],
                         polylines: [],
                         isShown: true,
                         startDate: new Date("2021-01-01"),
                         endDate: new Date("2030-01-01")
                     };
+                    if (this.checkDate(layerGroups, pos)) {
+                        layerGroups[pos.NA].markers.push(<MyMarker key={pos.ID} pos={pos} color={color}/>)
+                    }
                     boatIcons[pos.NA] = [generateBoatIcon(color), generateBoatIcon(color, "red")]
                     newVal = true
 
@@ -195,6 +212,8 @@ class App extends Component {
                         </LayerGroup>
                     ),
                     isShown: layerGroups[name].isShown,
+                    startDate: new Date("2021-01-01"),
+                    endDate: new Date("2022-01-01")
                 };
             }
             // layerGroups object is now ready to be published in state
@@ -216,14 +235,13 @@ class App extends Component {
     }
 
     setDate(name, type, a) {
-        // let tmp = Object.assign({}, this.state.layerGroups);
-        // if (type === 0)
-        //     tmp[name].startDate = new Date();
-        // else
-        //     tmp[name].endDate = a;
-        // this.setState({layerGroups: tmp})
-        //
-        console.log(a);
+        let tmp = Object.assign({}, this.state.layerGroups);
+        if (type === 0)
+            tmp[name].startDate = new Date(a);
+        else
+            tmp[name].endDate = new Date(a);
+        this.setState({layerGroups: tmp})
+
 
     }
 
