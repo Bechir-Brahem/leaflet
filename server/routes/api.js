@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var boats = require('../services/boats')
+const {getMultiple} = require("../services/boats");
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  res.json(await boats.getMultiple());
+
+
+    return res.json(await getMultiple())
 });
 
 module.exports = router;

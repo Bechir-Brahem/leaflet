@@ -1,21 +1,27 @@
 const db = require('./db');
-const config = require('../config');
 
 //TODO: paginator
-async function getMultiple(){
-    const rows = await db.query(
-
-       ` (select ID,NA,TM,LT,LG,DA,TI from trackingData ORDER BY DA DESC,TI DESC LIMIT 1150 )
-        order by NA,DA DESC,TI DESC;`
-    );
+async function getMultiple() {
+    const rows = await db.query('(select ID,NA,TM,LT,LG,DA,TI from trackingData ORDER BY DA DESC,TI DESC)');
 
     return emptyOrRows(rows);
 }
+
+function sortByDate(boats) {
+    boats.sort((a, b) => {
+        if (a.DA - b.DA === 0) {
+            return a.TI - b.TI;
+        }
+        return a.DA - b.DA;
+    })
+}
+
+
 function emptyOrRows(rows) {
-  if (!rows) {
-    return [];
-  }
-  return rows;
+    if (!rows) {
+        return [];
+    }
+    return rows;
 }
 
 module.exports = {

@@ -31,11 +31,13 @@ export function numberToTimeString(str) {
     return str.substr(0, 2) + ':' + str.substr(2, 2)
 }
 
-export function popupText(position) {
-    return '<p style="text-align:center;">' + position.NA +
-        '<br>(' + position.LT + ' , ' + position.LG + ')' +
-        '<br>' + numberToDateString(position.DA) + " at " + numberToTimeString(position.TI) +
-        '</p>'
+export function popupText(position, type = 1) {
+    if (type)
+        return '<p style="text-align:center;">' + position.NA +
+            '<br>(' + position.LT + ' , ' + position.LG + ')' +
+            '<br>' + numberToDateString(position.DA) + " at " + numberToTimeString(position.TI) +
+            '</p>'
+
 }
 
 
@@ -77,6 +79,5 @@ export class Color {
  * @returns {number|string|*}
  * @constructor
  */
-export function dateToString(date)
-{
+export function dateToString(date) {
 }

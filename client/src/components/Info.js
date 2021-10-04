@@ -4,12 +4,12 @@ import {Accordion, Table} from "react-bootstrap";
 function Info(props) {
     let list = props.problems.map((key, index) => {
         return (
-            <tr key={key[0].ID+key[1].ID}>
+            <tr key={key[0].id+key[1].id}>
                 <td>{index+1}</td>
-                <td>{numberToDateString(key[0].DA)} {numberToTimeString(key[0].TI)}< /td>
-                <td>({key[0].LT} , {key[0].LG})</td>
-                <td>{numberToDateString(key[1].DA)} {numberToTimeString(key[1].TI)}</td>
-                <td>({key[1].LT} , {key[1].LG})</td>
+                <td>{numberToDateString(key[0].date)} {numberToTimeString(key[0].time)}< /td>
+                <td>({key[0].lt} , {key[0].lg})</td>
+                <td>{numberToDateString(key[1].date)} {numberToTimeString(key[1].time)}</td>
+                <td>({key[1].lt} , {key[1].lg})</td>
             </tr>
         )
     })

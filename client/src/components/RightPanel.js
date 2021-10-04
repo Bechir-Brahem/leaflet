@@ -3,19 +3,20 @@ import PersonPanel from "./PersonPanel";
 
 class RightPanel extends Component {
     render() {
-        let {layerGroups, problems} = this.props;
+        let {peopleState} = this.props;
+        let {problems}=this.props
         return (
             <div style={{
                 overflowY: 'scroll',
                 height: '70vh',
             }}>
-                {Object.keys(layerGroups).map((key) => (
+                {Object.keys(peopleState).map((key) => (
                     <PersonPanel
                         key={key}
                         name={key}
-                        checked={layerGroups[key].isShown}
-                        startDate={layerGroups[key].startDate}
-                        endDate={layerGroups[key].endDate}
+                        checked={peopleState[key].isShown}
+                        startDate={peopleState[key].startDate}
+                        endDate={peopleState[key].endDate}
                         togglePerson={this.props.togglePerson}
                         setDate={this.props.setDate}
                         problems={problems[key]}
