@@ -1,6 +1,6 @@
-import {Marker, Popup} from "react-leaflet";
 import React from "react";
-import {numberToDateString, numberToTimeString} from "./Helper";
+import {popupText} from "./Helper";
+import L from "leaflet"
 
 export class Position {
     constructor(pos) {
@@ -12,32 +12,13 @@ export class Position {
     }
 
     getMarker(problem, name, icons) {
-        return (
-
-            <Marker
-                key={this.id+name}
-                position={[this.lt, this.lg]}
-                icon={problem ? icons[1] : icons[0]}
-                riseOnHover={true}
-            >
-                <Popup>
-                    {this.popupText(name)}
-                </Popup>
-            </Marker>
-        )
-    }
-
-    popupText(name) {
-        return (
-            <span>
-            <center>{name}</center>
-            ({this.lt} , {this.lg}) <br/>
-            at {numberToDateString(this.date)} {numberToTimeString(this.time)}
-        </span>
-        )
-
+        return L.marker([this.lt, this.lg], {
+            icon: problem ? icons[1] : icons[0],
+            riseOnHover: true
+        }).bindPopup(popupText(this, name))
 
     }
+
 
 }
 

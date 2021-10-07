@@ -31,11 +31,11 @@ export function numberToTimeString(str) {
     return str.substr(0, 2) + ':' + str.substr(2, 2)
 }
 
-export function popupText(position, type = 1) {
+export function popupText(position, name, type = 1) {
     if (type)
-        return '<p style="text-align:center;">' + position.NA +
-            '<br>(' + position.LT + ' , ' + position.LG + ')' +
-            '<br>' + numberToDateString(position.DA) + " at " + numberToTimeString(position.TI) +
+        return '<p style="text-align:center;">' + name +
+            '<br>(' + position.lt + ' , ' + position.lg + ')' +
+            '<br>' + numberToDateString(position.date) + " at " + numberToTimeString(position.time) +
             '</p>'
 
 }
@@ -46,14 +46,15 @@ export class Color {
         this.current = 0;
         this.names = [
             "#00ffff", "#ff00ff", "#ffff00", "#ffffff",
+            "#ffb6c1","#ffa500",  "#00ff00","#bdb76b",
             "#00008b", "#008b8b", "#a9a9a9", "#006400",
             "#9932cc", "#e9967a",
             "#add8e6", "#e0ffff", "#90ee90", "#d3d3d3",
-            "#808000", "#ffa500", "#ffc0cb", "#800080",
+            "#808000", "#ffc0cb", "#800080",
             "#00ff00", "#0000ff", "#f0ffff", "#f5f5dc",
-            "#bdb76b", "#8b008b", "#556b2f", "#ff8c00",
+            "#8b008b", "#556b2f", "#ff8c00",
             "#ffd700", "#008000", "#4b0082", "#f0e68c",
-            "#ffb6c1", "#ffffe0", "#00ff00", "#000080",
+             "#ffffe0", "#000080",
             "#800080", "#c0c0c0",
         ]
     }

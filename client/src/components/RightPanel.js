@@ -8,7 +8,7 @@ class RightPanel extends Component {
         return (
             <div style={{
                 overflowY: 'scroll',
-                height: '70vh',
+                height: '100vh',
             }}>
                 {Object.keys(peopleState).map((key) => (
                     <PersonPanel

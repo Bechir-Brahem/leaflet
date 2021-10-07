@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import Map from "./Map";
-import {Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Color, generateBoatIcon} from "../classes/Helper";
 import {Position} from "../classes/Position";
@@ -52,7 +52,6 @@ class App extends Component {
                     }
                     people[pos.na].positions.push(new Position(pos))
                 }
-                console.log(people)
                 Object.values(people).map(person => person.update({
                     isShown: true,
                     startDate: new Date("2021-01-01"),
@@ -72,8 +71,8 @@ class App extends Component {
         console.log(name)
         let tmp = Object.assign({}, this.state.peopleState);
         tmp[name].isShown = !tmp[name].isShown;
+        people[name].layerGroup.remove();
 
-        people[name].update(tmp[name]);
         this.setState({peopleState: tmp});
     }
 
@@ -83,6 +82,7 @@ class App extends Component {
             tmp[name].startDate = new Date(a);
         else
             tmp[name].endDate = new Date(a);
+        people[name].layerGroup.remove();
         people[name].update(tmp[name])
         this.setState({layerGroups: tmp})
 
@@ -103,17 +103,20 @@ class App extends Component {
 
         return (
             <div>
-                <Container>
-                    <Row>
-                        <Map people={people} peopleState={this.state.peopleState}/>
-                    </Row>
-                    <Row style={{padding: "0!important"}}>
-                        <RightPanel
-                            peopleState={peopleState}
-                            togglePerson={this.togglePerson.bind(this)}
-                            setDate={this.setDate.bind(this)}
-                            problems={problems}
-                        />
+                <Container fluid={true}>
+                    <Row  >
+                        <Col lg={8} md={12}>
+                            <Map people={people} peopleState={this.state.peopleState}/>
+                        </Col>
+                        <Col lg={4} md={12}>
+                            <RightPanel
+                                peopleState={peopleState}
+                                togglePerson={this.togglePerson.bind(this)}
+                                setDate={this.setDate.bind(this)}
+                                problems={problems}
+                            />
+
+                        </Col>
                     </Row>
                 </Container>
             </div>

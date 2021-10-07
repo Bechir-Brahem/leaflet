@@ -1,11 +1,22 @@
 import {useMap} from "react-leaflet";
-import React from "react";
+import React, {useEffect} from "react";
 
-function myLayers()
-{
-    const map =useMap();
-    console.log(map.getCenter())
-    return <div/>
+let oldState = [];
+
+function MyLayers(props) {
+    console.log("My layers", Date.now())
+    const map = useMap();
+
+
+
+    Object.values(props.people).map(person => {
+
+        if (props.peopleState[person.name].isShown) {
+                person.getLayerGroup().addTo(map)
+        }
+    })
+    return null
 
 }
-export default myLayers;
+
+export default MyLayers;

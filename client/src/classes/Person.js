@@ -1,6 +1,6 @@
-import {LayerGroup, Polyline, Popup} from "react-leaflet";
 import {numberToDateString, numberToTimeString} from "./Helper";
 import React from "react";
+import L from "leaflet"
 
 export class Person {
     constructor(name) {
@@ -15,25 +15,12 @@ export class Person {
     positions = []
     markers = []
     problems = []
+    layerGroup = L.layerGroup();
     color;
     icons;
-    oldMarkers = [];
-    oldPolylines = [];
 
 
     update(state) {
-        if (state.isShown === false) {
-            this.oldMarkers = this.markers;
-            this.oldPolylines = this.polylines;
-            this.markers = []
-            this.polylines = []
-            return;
-        }
-        if (state.isShown === true && this.oldMarkers.length !== 0) {
-            this.markers = this.oldMarkers;
-            this.polylines = this.oldPolylines;
-            return;
-        }
 
         let lastPos = null
         let tmpPolyline = [];
@@ -62,14 +49,13 @@ export class Person {
             lastPos = pos
         }
         this.insertPolyline(tmpPolyline, pos, "c")
+
+        this.layerGroup = L.layerGroup(this.polylines.concat(this.markers))
+
     }
 
     getLayerGroup() {
-        return (
-            <LayerGroup key={this.name}>
-                {this.markers}
-                {this.polylines}
-            </LayerGroup>)
+        return this.layerGroup
     }
 
 
@@ -106,35 +92,31 @@ export class Person {
         if (tmpPolyline.length <= 1) return;
 
         let obj, text
+
+        let polylineText = (pos, problem = false, lastPos = null) => {
+            if (problem) {
+                return this.name + " " + numberToDateString(lastPos.date) + " " + numberToTimeString(lastPos.time) + " => " +
+                    numberToDateString(pos.date) + " " + numberToTimeString(pos.time)
+            }
+            return '<p style="text-align:center;">this.name</p>'
+        }
+
         /** generates obj which contains information about the type of line
          * and text which is the inner text if the popup
          */
         if (problem) {
             obj = {color: 'red', dashArray: "20,20"}
-            text = <span>
-                <center>{this.name}</center>
-                ({pos.lt} , {pos.lg} ) => ({lastPos.lt} , {lastPos.lg})
-                <br/>
-                {"(" + numberToDateString(pos.date) + " , " + numberToTimeString(pos.time) +
-                ") => ("
-                + numberToDateString(lastPos.date) + " , " + numberToTimeString(lastPos.time) + ")"}
-            </span>
+            text = polylineText(pos, problem, lastPos)
+
 
         } else {
             obj = {color: this.color};
-            text = <center>{this.name}</center>;
+            text = polylineText(pos)
         }
 
         /** creates the Polyline and pushes it to the array */
         this.polylines.push(
-            <Polyline
-                key={pos.id + ref}
-                pathOptions={obj}
-                positions={tmpPolyline}>
-                <Popup>
-                    {text}
-                </Popup>
-            </Polyline>
+            L.polyline(tmpPolyline, obj).bindPopup(text)
         );
 
     }
