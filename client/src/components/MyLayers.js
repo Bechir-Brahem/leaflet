@@ -1,18 +1,22 @@
 import {useMap} from "react-leaflet";
-import React, {useEffect} from "react";
+import L from "leaflet";
 
-let oldState = [];
+
 
 function MyLayers(props) {
     console.log("My layers", Date.now())
     const map = useMap();
+    console.log(map.options)
+
+    L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png").addTo(map);
 
 
 
-    Object.values(props.people).map(person => {
+    Object.values(props.people).forEach(person => {
 
+        //TODO:check for changed boats only
         if (props.peopleState[person.name].isShown) {
-                person.getLayerGroup().addTo(map)
+                person.draw(map,props.peopleState[person.name]);
         }
     })
     return null

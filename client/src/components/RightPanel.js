@@ -14,12 +14,16 @@ class RightPanel extends Component {
                     <PersonPanel
                         key={key}
                         name={key}
-                        checked={peopleState[key].isShown}
+                        isShown={peopleState[key].isShown}
+                        allPos={peopleState[key].allPos}
                         startDate={peopleState[key].startDate}
                         endDate={peopleState[key].endDate}
                         togglePerson={this.props.togglePerson}
+                        toggleAllPos={this.props.toggleAllPos}
                         setDate={this.props.setDate}
                         problems={problems[key]}
+                        sos={this.props.sos[key]}
+                        posCount={this.props.posCount[key]}
                     />
                 ))}
             </div>

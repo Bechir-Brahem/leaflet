@@ -45,6 +45,7 @@ class App extends Component {
 
                         peopleState[pos.na] = {
                             isShown: true,
+                            allPos: false,
                             startDate: new Date("2021-01-01"),
                             endDate: new Date("2022-01-01"),
                         }
@@ -52,11 +53,7 @@ class App extends Component {
                     }
                     people[pos.na].positions.push(new Position(pos))
                 }
-                Object.values(people).map(person => person.update({
-                    isShown: true,
-                    startDate: new Date("2021-01-01"),
-                    endDate: new Date("2022-01-01"),
-                }))
+                Object.values(people).map(person => person.update(peopleState[person.name]))
                 this.setState({peopleState: peopleState})
             }
         )
@@ -68,9 +65,17 @@ class App extends Component {
      * @param {String} name the name of the person to hide or show
      */
     togglePerson(name) {
-        console.log(name)
         let tmp = Object.assign({}, this.state.peopleState);
         tmp[name].isShown = !tmp[name].isShown;
+        people[name].layerGroup.remove();
+        people[name].undrawSOS();
+
+        this.setState({peopleState: tmp});
+    }
+
+    toggleAllPos(name) {
+        let tmp = Object.assign({}, this.state.peopleState);
+        tmp[name].allPos = !tmp[name].allPos;
         people[name].layerGroup.remove();
 
         this.setState({peopleState: tmp});
@@ -83,6 +88,7 @@ class App extends Component {
         else
             tmp[name].endDate = new Date(a);
         people[name].layerGroup.remove();
+        people[name].undrawSOS();
         people[name].update(tmp[name])
         this.setState({layerGroups: tmp})
 
@@ -96,15 +102,21 @@ class App extends Component {
          * @type {Person[]}
          */
         let problems = [];
-        Object.values(people).map((person) => {
+        let sos = [];
+        let posCount=[];
+        Object.values(people).forEach((person) => {
             problems[person.name] = person.problems
+            let tmp = [];
+            tmp = person.allSOS.map(arr => arr[1])
+            sos[person.name] = tmp;
+            posCount[person.name]=person.markers.length;
         })
 
 
         return (
             <div>
                 <Container fluid={true}>
-                    <Row  >
+                    <Row>
                         <Col lg={8} md={12}>
                             <Map people={people} peopleState={this.state.peopleState}/>
                         </Col>
@@ -113,7 +125,10 @@ class App extends Component {
                                 peopleState={peopleState}
                                 togglePerson={this.togglePerson.bind(this)}
                                 setDate={this.setDate.bind(this)}
+                                toggleAllPos={this.toggleAllPos.bind(this)}
                                 problems={problems}
+                                sos={sos}
+                                posCount={posCount}
                             />
 
                         </Col>

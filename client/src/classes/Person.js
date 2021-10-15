@@ -1,8 +1,11 @@
 import {numberToDateString, numberToTimeString} from "./Helper";
-import React from "react";
 import L from "leaflet"
 
 export class Person {
+    SOSmarkers = [];
+
+    sos = [];
+
     constructor(name) {
         this.name = name;
     }
@@ -18,6 +21,7 @@ export class Person {
     layerGroup = L.layerGroup();
     color;
     icons;
+    allSOS=[]
 
 
     update(state) {
@@ -28,6 +32,7 @@ export class Person {
         this.markers = []
         this.polylines = []
         this.problems = []
+        this.SOSmarkers = []
         if (!state.isShown) return;
 
         for (pos of this.positions) {
@@ -45,17 +50,18 @@ export class Person {
             }
 
             tmpPolyline.push([pos.lt, pos.lg])
-            this.markers.push(pos.getMarker(problem, this.name, this.icons))
+            if (pos.tm) {
+                this.allSOS.push([pos.getMarker(problem, this.name, this.icons), pos])
+            } else
+                this.markers.push(pos.getMarker(problem, this.name, this.icons))
             lastPos = pos
         }
         this.insertPolyline(tmpPolyline, pos, "c")
+        if (this.allSOS.length>0)
+            this.SOSmarkers=[this.allSOS[0]]
+        console.log(this.SOSmarkers)
 
-        this.layerGroup = L.layerGroup(this.polylines.concat(this.markers))
 
-    }
-
-    getLayerGroup() {
-        return this.layerGroup
     }
 
 
@@ -124,5 +130,42 @@ export class Person {
     checkDate(pos, state) {
         let date = new Date(numberToDateString(pos.date, 1));
         return state.startDate <= date && date <= state.endDate;
+    }
+
+    draw(map, state) {
+        if (state.allPos) {
+            this.layerGroup = L.layerGroup(this.polylines.concat(this.markers))
+            this.layerGroup.addTo(map)
+        } else if (this.markers.length > 0) {
+            console.log("here")
+            this.layerGroup = L.layerGroup([this.markers[0]])
+            this.layerGroup.addTo(map);
+        }
+
+
+        this.SOSmarkers.forEach(arr => {
+            let marker = arr[0];
+            let pos = arr[1];
+            if (pos.interval === 0 || pos.interval === -1)
+                pos.interval = setInterval(() => {
+                    if (map.hasLayer(marker)) {
+                        map.removeLayer(marker);
+                    } else {
+                        map.addLayer(marker)
+                    }
+                }, 1000)
+
+        })
+    }
+
+    undrawSOS() {
+        this.SOSmarkers.forEach(arr => {
+            let marker = arr[0];
+            let pos = arr[1];
+            clearInterval(pos.interval);
+            marker.remove();
+            pos.interval = 0;
+
+        })
     }
 }

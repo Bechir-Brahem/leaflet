@@ -13,16 +13,24 @@ class PersonPanel extends Component {
             }}>
                 <div>
                     <Filter
-                        isChecked={this.props.checked}
+                        isShown={this.props.isShown}
+                        isAllPos={this.props.allPos}
                         startDate={this.props.startDate}
                         endDate={this.props.endDate}
                         name={this.props.name}
+
                         togglePerson={this.props.togglePerson}
+                        toggleAllPos={this.props.toggleAllPos}
                         setDate={this.props.setDate}
+                         posCount={this.props.posCount}
 
                     />
                 </div>
-                <Info problems={this.props.problems}/>
+                <Info problems={this.props.problems}
+                sos={this.props.sos}
+
+
+                />
 
 
             </div>
