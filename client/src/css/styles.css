@@ -1,7 +1,32 @@
-.leaflet-container{
+.leaflet-container {
     height: 100vh;
 
 }
-.row > *{
-    padding:0!important;
+
+.row > * {
+    padding: 0 !important;
+}
+
+#mapDiv {
+
+    transition: width 500ms;
+}
+
+#rightPanelDiv {
+    transition: width 500ms;
+}
+
+#arrows {
+    transition: transform .8s ease-in-out;
+}
+
+.rotate {
+    transform: rotate(180deg);
+
+}
+.rotate:hover{
+    transform:rotate(180deg) scale(1.5) translateX(-5px) translateY(-5px)!important;
+}
+#arrows:hover{
+    transform: scale(1.5) translateX(5px) translateY(5px);
 }

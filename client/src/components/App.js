@@ -1,12 +1,13 @@
 import React, {Component} from "react";
 import axios from "axios";
 import Map from "./Map";
-import {Col, Container, Row} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Color, generateBoatIcon} from "../classes/Helper";
 import {Position} from "../classes/Position";
 import {Person} from "../classes/Person";
 import RightPanel from "./RightPanel";
+import L from "leaflet";
+import debounce from "lodash.debounce"
 
 Date.prototype.yyyymmdd = function () {
     const mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -57,7 +58,13 @@ class App extends Component {
                 this.setState({peopleState: peopleState})
             }
         )
+        const debouncedCallback = debounce(() => {
+            this.map.invalidateSize();
+        }, 500);
 
+        window.addEventListener("resize", () => {
+            debouncedCallback()
+        })
     }
 
     /**
@@ -95,6 +102,12 @@ class App extends Component {
 
     }
 
+    map = {};
+
+    setMap(map) {
+        this.map = map
+    }
+
     render() {
         console.log("start render", Date.now())
         /**
@@ -103,37 +116,40 @@ class App extends Component {
          */
         let problems = [];
         let sos = [];
-        let posCount=[];
+        let posCount = [];
         Object.values(people).forEach((person) => {
             problems[person.name] = person.problems
             let tmp = [];
             tmp = person.allSOS.map(arr => arr[1])
             sos[person.name] = tmp;
-            posCount[person.name]=person.markers.length;
+            posCount[person.name] = person.markers.length;
         })
 
 
-        return (
-            <div>
-                <Container fluid={true}>
-                    <Row>
-                        <Col lg={8} md={12}>
-                            <Map people={people} peopleState={this.state.peopleState}/>
-                        </Col>
-                        <Col lg={4} md={12}>
-                            <RightPanel
-                                peopleState={peopleState}
-                                togglePerson={this.togglePerson.bind(this)}
-                                setDate={this.setDate.bind(this)}
-                                toggleAllPos={this.toggleAllPos.bind(this)}
-                                problems={problems}
-                                sos={sos}
-                                posCount={posCount}
-                            />
 
-                        </Col>
-                    </Row>
-                </Container>
+        return (
+            <div style={{display: "flex"}}>
+                <div id="mapDiv" style={{width: "60vw"}}
+                >
+                    <Map id="mapEl"
+                         people={people}
+                         peopleState={this.state.peopleState}
+                         setMap={this.setMap.bind(this)}
+                    />
+
+                </div>
+                <div id="rightPanelDiv" style={{width: "40vw"}}>
+                    <RightPanel
+                        map={this.map}
+                        peopleState={peopleState}
+                        togglePerson={this.togglePerson.bind(this)}
+                        setDate={this.setDate.bind(this)}
+                        toggleAllPos={this.toggleAllPos.bind(this)}
+                        problems={problems}
+                        sos={sos}
+                        posCount={posCount}
+                    /></div>
+
             </div>
         );
     }
