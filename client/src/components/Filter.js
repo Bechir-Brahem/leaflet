@@ -1,8 +1,47 @@
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Form} from "react-bootstrap";
 import {Component} from "react";
+import {
+    faCarBattery,
+    faMicrochip,
+    faPlug,
+    faThermometerEmpty,
+    faThermometerFull,
+    faThermometerHalf,
+    faThermometerQuarter,
+    faThermometerThreeQuarters
+} from '@fortawesome/free-solid-svg-icons'
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
 class Filter extends Component {
+    temp;
+    thermIcon;
+    voltage;
+    tempSys;
+
+    constructor(props) {
+        super(props);
+        this.temp = getRandomInt(100);
+        this.thermIcon = faThermometerThreeQuarters;
+        if (this.temp > 80)
+            this.thermIcon = faThermometerFull;
+        else if (this.temp > 60)
+            this.thermIcon = faThermometerThreeQuarters;
+        else if (this.temp > 40)
+            this.thermIcon = faThermometerHalf;
+        else if (this.temp > 20)
+            this.thermIcon = faThermometerQuarter;
+        else
+            this.thermIcon = faThermometerEmpty;
+
+        this.voltage=(getRandomInt(15)+20+Math.random()).toPrecision(4)
+        this.tempSys=getRandomInt(70);
+
+    }
     render() {
+
         return (
             <div>
 
@@ -36,22 +75,48 @@ class Filter extends Component {
                     marginTop: "5px",
                     marginBottom: "10px"
                 }}>
-                    <strong>Date Filter:</strong>
+                    <strong style={{paddingBottom: "10px"}}>Date Filter:</strong>
                     <br/>
-                    <span> from:
+                    <div style={{display: "flex", justifyContent: "space-around"}}>
+                        <span> from:
                         <input
                             type="date"
                             onChange={(e) => this.props.setDate(this.props.name, 0, e.target.value)}
                             value={(this.props.startDate).yyyymmdd()}
                         />
                     </span>
-                    <span style={{marginLeft: "10px"}}> to:
+                        <span style={{marginLeft: "10px"}}> to:
                         <input
                             type="date"
                             onChange={(e) => this.props.setDate(this.props.name, 1, e.target.value)}
                             value={(this.props.endDate).yyyymmdd()}
                         />
                     </span>
+                    </div>
+                </div>
+
+                <div style={{display: "flex", justifyContent: "space-between", padding: "20px"}}>
+                    <div>
+                        <FontAwesomeIcon icon={this.thermIcon} size="2x"/>
+                        <span style={{marginRight: "10px"}}/>
+                        {this.temp}°C
+                    </div>
+                    <div>
+                        <FontAwesomeIcon icon={faMicrochip} size="2x"/>
+                        <span style={{marginRight: "10px"}}/>
+                        {this.tempSys}°C
+                    </div>
+                    <div>
+                        <FontAwesomeIcon icon={faCarBattery} size="2x"/>
+                        <span style={{marginRight: "10px"}}/>
+                        Full : {this.voltage} V
+                    </div>
+                    <div>
+                        <FontAwesomeIcon icon={faPlug} size="2x"/>
+                        <span style={{marginRight: "10px"}}/>
+                        charging...
+
+                    </div>
                 </div>
             </div>
         );

@@ -6,7 +6,6 @@ import {Color, generateBoatIcon} from "../classes/Helper";
 import {Position} from "../classes/Position";
 import {Person} from "../classes/Person";
 import RightPanel from "./RightPanel";
-import L from "leaflet";
 import debounce from "lodash.debounce"
 
 Date.prototype.yyyymmdd = function () {
@@ -29,9 +28,18 @@ class App extends Component {
         peopleState: []
     }
 
+    debouncedCallback = debounce(() => {
+        this.map.invalidateSize();
+        this.rightW = document.getElementById("rightPanelDiv").style.width
+        this.mapW = document.getElementById("mapDiv").style.width
+    }, 500);
+    mapW = "60vw";
+    rightW = "40vw";
 
     componentDidMount() {
         console.log("start ComponentDidMount", Date.now())
+        this.rightW = document.getElementById("rightPanelDiv").style.width
+        this.mapW = document.getElementById("mapDiv").style.width
         axios.get("/api").then((res) => {
                 // people = []
                 console.log("start axios", Date.now())
@@ -58,12 +66,9 @@ class App extends Component {
                 this.setState({peopleState: peopleState})
             }
         )
-        const debouncedCallback = debounce(() => {
-            this.map.invalidateSize();
-        }, 500);
 
         window.addEventListener("resize", () => {
-            debouncedCallback()
+            this.debouncedCallback()
         })
     }
 
@@ -126,10 +131,9 @@ class App extends Component {
         })
 
 
-
         return (
-            <div style={{display: "flex"}}>
-                <div id="mapDiv" style={{width: "60vw"}}
+            <div id={"main"}>
+                <div id="mapDiv"
                 >
                     <Map id="mapEl"
                          people={people}
@@ -138,8 +142,9 @@ class App extends Component {
                     />
 
                 </div>
-                <div id="rightPanelDiv" style={{width: "40vw"}}>
+                <div id="rightPanelDiv">
                     <RightPanel
+                        widths={[this.mapW, this.rightW]}
                         map={this.map}
                         peopleState={peopleState}
                         togglePerson={this.togglePerson.bind(this)}

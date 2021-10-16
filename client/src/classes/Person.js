@@ -59,7 +59,6 @@ export class Person {
         this.insertPolyline(tmpPolyline, pos, "c")
         if (this.allSOS.length>0)
             this.SOSmarkers=[this.allSOS[0]]
-        console.log(this.SOSmarkers)
 
 
     }
@@ -137,7 +136,6 @@ export class Person {
             this.layerGroup = L.layerGroup(this.polylines.concat(this.markers))
             this.layerGroup.addTo(map)
         } else if (this.markers.length > 0) {
-            console.log("here")
             this.layerGroup = L.layerGroup([this.markers[0]])
             this.layerGroup.addTo(map);
         }

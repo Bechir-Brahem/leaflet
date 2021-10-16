@@ -7,14 +7,6 @@
     padding: 0 !important;
 }
 
-#mapDiv {
-
-    transition: width 500ms;
-}
-
-#rightPanelDiv {
-    transition: width 500ms;
-}
 
 #arrows {
     transition: transform .8s ease-in-out;
@@ -24,9 +16,93 @@
     transform: rotate(180deg);
 
 }
-.rotate:hover{
-    transform:rotate(180deg) scale(1.5) translateX(-5px) translateY(-5px)!important;
+
+.rotate:hover {
+    transform: rotate(180deg) scale(1.2) !important;
 }
-#arrows:hover{
-    transform: scale(1.5) translateX(5px) translateY(5px);
+
+#arrows:hover {
+    transform: scale(1.2);
+}
+
+#a {
+    box-shadow: inset 50px 0 50px -2px #ccc;
+    cursor: pointer;
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+
+}
+
+#cont {
+    transition: margin-top 100ms ease-out;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+
+}
+
+#cont:hover {
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+    transform: translate3d(0, 0, 0);
+    perspective: 1000px;
+}
+
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-2px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(2px, 0, 0);
+    }
+}
+
+#main {
+    display: flex;
+}
+
+
+@media (max-width: 1900px ) and (min-width: 1500px){
+   #main #mapDiv {
+        width: 50vw ;
+        transition: width 500ms;
+    }
+
+    #main #rightPanelDiv {
+        width: 50vw ;
+        transition: width 500ms;
+    }
+
+}
+@media (max-width: 1500px){
+    #main #mapDiv {
+        width: 40vw ;
+        transition: width 500ms;
+    }
+
+    #main #rightPanelDiv {
+        width: 60vw ;
+        transition: width 500ms;
+    }
+
+}
+
+#mapDiv {
+
+    transition: width 500ms;
+    width: 60vw;
+}
+
+#rightPanelDiv {
+    width: 40vw;
+    transition: width 500ms;
 }
