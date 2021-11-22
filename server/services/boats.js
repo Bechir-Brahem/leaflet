@@ -6,6 +6,11 @@ async function getMultiple() {
 
     return emptyOrRows(rows);
 }
+async function getLimited(l) {
+    const rows = await db.query('(select ID,NA,TM,LT,LG,DA,TI from trackingData ORDER BY DA DESC,TI DESC LIMIT '+l+')');
+
+    return emptyOrRows(rows);
+}
 
 function sortByDate(boats) {
     boats.sort((a, b) => {
@@ -25,5 +30,6 @@ function emptyOrRows(rows) {
 }
 
 module.exports = {
-    getMultiple
+    getMultiple,
+    getLimited,
 }
