@@ -13,4 +13,3 @@ const pgConfig = {
 module.exports = {
     pgConfig
 };
-
